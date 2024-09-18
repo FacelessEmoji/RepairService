@@ -2,6 +2,8 @@ package rut.miit.repairservice.models.entities;
 
 import jakarta.persistence.*;
 import rut.miit.repairservice.models.baseEntities.TimestampedEntity;
+import rut.miit.repairservice.models.converters.StatusTypeConverter;
+import rut.miit.repairservice.models.enums.StatusType;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,9 +14,9 @@ public class Order extends TimestampedEntity {
     @Column(name = "description", columnDefinition = "text")
     private String description;
 
-    //Enum
+    @Convert(converter = StatusTypeConverter.class)
     @Column(name = "status",length = 15, nullable = false)
-    private String status;
+    private StatusType status;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "client_id")
