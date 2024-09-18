@@ -28,4 +28,47 @@ public class Order extends TimestampedEntity {
 
     @OneToMany(mappedBy = "order",cascade = CascadeType.REMOVE, orphanRemoval = true)
     private List<OrderPart> orderParts = new ArrayList<>();
+
+    public Order(String description, StatusType status, Client client, Master master) {
+        this.description = description;
+        this.status = status;
+        this.client = client;
+        this.master = master;
+    }
+
+    public Order() {
+
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public StatusType getStatus() {
+        return status;
+    }
+
+    public void setStatus(StatusType status) {
+        this.status = status;
+    }
+
+    public Master getMaster() {
+        return master;
+    }
+
+    public void setMaster(Master master) {
+        this.master = master;
+    }
+
+    public Client getClient() {
+        return client;
+    }
+
+    public void setClient(Client client) {
+        this.client = client;
+    }
 }

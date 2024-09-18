@@ -23,4 +23,37 @@ public class Master extends TimestampedEntity {
 
     @OneToMany(mappedBy = "master",cascade = CascadeType.REMOVE, orphanRemoval = true)
     private List<Order> orders = new ArrayList<>();
+
+    public Master(String firstName, String phoneNumber, SpecializationType specialization) {
+        this.firstName = firstName;
+        this.phoneNumber = phoneNumber;
+        this.specialization = specialization;
+    }
+
+    public Master() {
+    }
+
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
+    }
+
+    public SpecializationType getSpecialization() {
+        return specialization;
+    }
+
+    public void setSpecialization(SpecializationType specialization) {
+        this.specialization = specialization;
+    }
 }

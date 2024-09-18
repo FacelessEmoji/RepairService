@@ -16,4 +16,37 @@ public class OrderPart extends BaseEntity {
 
     @Column(name = "quantity", length = 4, nullable = false)
     private Integer quantity;
+
+    public OrderPart(Order order, Part part, Integer quantity) {
+        this.order = order;
+        this.part = part;
+        this.quantity = quantity;
+    }
+
+    public OrderPart() {
+    }
+
+    public Order getOrder() {
+        return order;
+    }
+
+    public void setOrder(Order order) {
+        this.order = order;
+    }
+
+    public Part getPart() {
+        return part;
+    }
+
+    public void setPart(Part part) {
+        this.part = part;
+    }
+
+    public Integer getQuantity() {
+        return quantity;
+    }
+
+    public void setQuantity(Integer quantity) {
+        this.quantity = quantity;
+    }
 }
