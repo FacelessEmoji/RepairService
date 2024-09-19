@@ -1,13 +1,14 @@
 package rut.miit.repairservice.services.interfaces;
 
 import rut.miit.repairservice.dtos.main.OrderDTO;
+import rut.miit.repairservice.models.entities.Order;
 import rut.miit.repairservice.models.enums.StatusType;
 
 import java.util.List;
 
 public interface OrderService<ID> {
     List<OrderDTO> getAllOrders();
-    OrderDTO getOrderById(ID id);
+    Order getOrderById(ID id);
     OrderDTO createOrder(OrderDTO orderDTO);
     OrderDTO updateOrder(ID id, OrderDTO orderDTO);
     void deleteOrder(ID id);
