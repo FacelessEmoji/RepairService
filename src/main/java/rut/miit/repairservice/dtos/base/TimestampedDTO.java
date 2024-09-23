@@ -2,7 +2,7 @@ package rut.miit.repairservice.dtos.base;
 
 import java.time.LocalDateTime;
 
-public class TimestampedDTO {
+public class TimestampedDTO extends BaseDTO {
     private LocalDateTime created;
     private LocalDateTime modified;
 

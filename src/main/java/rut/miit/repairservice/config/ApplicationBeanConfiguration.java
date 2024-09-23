@@ -21,9 +21,9 @@ public class ApplicationBeanConfiguration {
                 .setFieldMatchingEnabled(true)
                 .setFieldAccessLevel(org.modelmapper.config.Configuration.AccessLevel.PRIVATE);
 
-        TypeMap<Order, OrderDTO> offerToDTO = modelMapper.createTypeMap(Order.class, OrderDTO.class);
-        offerToDTO.addMappings(m -> m.map(src -> src.getClient().getId(), OrderDTO::setClient));
-        offerToDTO.addMappings(m -> m.map(src -> src.getMaster().getId(), OrderDTO::setMaster));
+        TypeMap<Order, OrderDTO> orderToDTO = modelMapper.createTypeMap(Order.class, OrderDTO.class);
+        orderToDTO.addMappings(m -> m.map(src -> src.getClient().getId(), OrderDTO::setClient));
+        orderToDTO.addMappings(m -> m.map(src -> src.getMaster().getId(), OrderDTO::setMaster));
 
 
         TypeMap<OrderPart, OrderPartDTO> orderPartToDTO = modelMapper.createTypeMap(OrderPart.class, OrderPartDTO.class);

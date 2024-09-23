@@ -14,7 +14,7 @@ public class Master extends TimestampedEntity {
     @Column(name = "firstName", length = 255, nullable = false)
     private String firstName;
 
-    @Column(name = "phoneNumber", length = 10, nullable = false)
+    @Column(name = "phoneNumber", length = 11, nullable = false)
     private String phoneNumber;
 
     @Convert(converter = SpecializationTypeConverter.class)

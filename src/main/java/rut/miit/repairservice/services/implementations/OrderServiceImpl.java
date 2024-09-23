@@ -57,8 +57,9 @@ public class OrderServiceImpl implements OrderService<String> {
     @Override
     public OrderDTO createOrder(OrderDTO orderDTO) {
         Order order = modelMapper.map(orderDTO, Order.class);
-        order = orderRepository.saveAndFlush(order);
-        return modelMapper.map(order, OrderDTO.class);
+        order.setClient(clientRepository.findById(orderDTO.getClient()).orElse(null));
+        order.setMaster(masterRepository.findById(orderDTO.getMaster()).orElse(null));
+        return modelMapper.map(orderRepository.saveAndFlush(modelMapper.map(order, Order.class)), OrderDTO.class);
     }
 
     @Override

@@ -52,8 +52,10 @@ public class OrderPartServiceImpl implements OrderPartService<String> {
     @Override
     public OrderPartDTO createOrderPart(OrderPartDTO orderPartDTO) {
         OrderPart orderPart = modelMapper.map(orderPartDTO, OrderPart.class);
-        orderPart = orderPartRepository.saveAndFlush(orderPart);
-        return modelMapper.map(orderPart, OrderPartDTO.class);
+        orderPart.setOrder(orderRepository.findById(orderPartDTO.getOrder()).orElse(null));
+        orderPart.setPart(partRepository.findById(orderPartDTO.getPart()).orElse(null));
+        return modelMapper.map(orderPartRepository.
+                saveAndFlush(modelMapper.map(orderPart, OrderPart.class)), OrderPartDTO.class);
     }
 
     @Override
