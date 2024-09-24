@@ -53,7 +53,6 @@ public class ClientServiceImpl implements ClientService<String> {
     }
 
     @Override
-    @Transactional
     public void deleteClient(String s) {
         clientRepository.deleteById(s);
     }

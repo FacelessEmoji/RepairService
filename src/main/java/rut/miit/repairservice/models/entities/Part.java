@@ -19,7 +19,7 @@ public class Part extends BaseEntity {
     @Column(name = "price", columnDefinition = "numeric(8,2)", nullable = false)
     private BigDecimal price;
 
-    @OneToMany(mappedBy = "part", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE, orphanRemoval = true)
+    @OneToMany(mappedBy = "part", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<OrderPart> orderParts = new ArrayList<>();
 
     public Part(String name, BigDecimal price, Integer quantity) {

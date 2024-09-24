@@ -18,7 +18,7 @@ public class Client extends TimestampedEntity {
     @Column(name = "email", length = 50)
     private String email;
 
-    @OneToMany(mappedBy = "client", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE, orphanRemoval = true)
+    @OneToMany(mappedBy = "client", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Order> orders = new ArrayList<>();
 
     public Client(String firstName, String phoneNumber, String email) {

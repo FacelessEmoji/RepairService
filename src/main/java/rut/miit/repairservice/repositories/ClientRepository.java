@@ -9,8 +9,4 @@ import rut.miit.repairservice.models.entities.Client;
 
 @Repository
 public interface ClientRepository extends JpaRepository<Client, String> {
-    @Transactional
-    @Modifying
-    @Query(value = "DELETE FROM clients WHERE id = ?1", nativeQuery = true)
-    void deleteById(String id);
 }

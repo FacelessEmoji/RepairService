@@ -26,7 +26,7 @@ public class Order extends TimestampedEntity {
     @JoinColumn(name = "master_id")
     private Master master;
 
-    @OneToMany(mappedBy = "order", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE, orphanRemoval = true)
+    @OneToMany(mappedBy = "order", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<OrderPart> orderParts = new ArrayList<>();
 
     public Order(String description, StatusType status, Client client, Master master) {

@@ -21,7 +21,7 @@ public class Master extends TimestampedEntity {
     @Column(name = "specialization", nullable = false)
     private SpecializationType specialization;
 
-    @OneToMany(mappedBy = "master", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE, orphanRemoval = true)
+    @OneToMany(mappedBy = "master", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Order> orders = new ArrayList<>();
 
     public Master(String firstName, String phoneNumber, SpecializationType specialization) {
