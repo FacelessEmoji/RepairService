@@ -9,16 +9,16 @@ import java.util.List;
 @Entity
 @Table(name = "clients")
 public class Client extends TimestampedEntity {
-    @Column(name = "firstName", length = 255, nullable = false)
+    @Column(name = "first_name", length = 255, nullable = false)
     private String firstName;
 
-    @Column(name = "phoneNumber", length = 10, nullable = false)
+    @Column(name = "phone_number", length = 10, nullable = false)
     private String phoneNumber;
 
     @Column(name = "email", length = 50)
     private String email;
 
-    @OneToMany(mappedBy = "client",cascade = CascadeType.REMOVE, orphanRemoval = true)
+    @OneToMany(mappedBy = "client", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE, orphanRemoval = true)
     private List<Order> orders = new ArrayList<>();
 
     public Client(String firstName, String phoneNumber, String email) {

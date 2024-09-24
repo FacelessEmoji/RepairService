@@ -4,13 +4,13 @@ import jakarta.persistence.*;
 import rut.miit.repairservice.models.baseEntities.BaseEntity;
 
 @Entity
-@Table(name = "orderParts")
+@Table(name = "order_parts")
 public class OrderPart extends BaseEntity {
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "order_id")
     private Order order;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "part_id")
     private Part part;
 

@@ -18,15 +18,15 @@ public class Order extends TimestampedEntity {
     @Column(name = "status",length = 15, nullable = false)
     private StatusType status;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "client_id")
     private Client client;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "master_id")
     private Master master;
 
-    @OneToMany(mappedBy = "order",cascade = CascadeType.REMOVE, orphanRemoval = true)
+    @OneToMany(mappedBy = "order", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE, orphanRemoval = true)
     private List<OrderPart> orderParts = new ArrayList<>();
 
     public Order(String description, StatusType status, Client client, Master master) {

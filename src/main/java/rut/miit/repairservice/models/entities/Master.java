@@ -11,17 +11,17 @@ import java.util.List;
 @Entity
 @Table(name = "masters")
 public class Master extends TimestampedEntity {
-    @Column(name = "firstName", length = 255, nullable = false)
+    @Column(name = "first_name", length = 255, nullable = false)
     private String firstName;
 
-    @Column(name = "phoneNumber", length = 11, nullable = false)
+    @Column(name = "phone_number", length = 11, nullable = false)
     private String phoneNumber;
 
     @Convert(converter = SpecializationTypeConverter.class)
     @Column(name = "specialization", nullable = false)
     private SpecializationType specialization;
 
-    @OneToMany(mappedBy = "master",cascade = CascadeType.REMOVE, orphanRemoval = true)
+    @OneToMany(mappedBy = "master", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE, orphanRemoval = true)
     private List<Order> orders = new ArrayList<>();
 
     public Master(String firstName, String phoneNumber, SpecializationType specialization) {

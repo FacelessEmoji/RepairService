@@ -3,6 +3,7 @@ package rut.miit.repairservice.services.implementations;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import rut.miit.repairservice.dtos.main.ClientDTO;
 import rut.miit.repairservice.models.entities.Client;
 import rut.miit.repairservice.repositories.ClientRepository;
@@ -52,6 +53,7 @@ public class ClientServiceImpl implements ClientService<String> {
     }
 
     @Override
+    @Transactional
     public void deleteClient(String s) {
         clientRepository.deleteById(s);
     }

@@ -1,6 +1,8 @@
 package rut.miit.repairservice.dtos.base;
 
-public class BaseDTO {
+import org.springframework.hateoas.RepresentationModel;
+
+public class BaseDTO extends RepresentationModel<BaseDTO> {
     private String id;
 
     public BaseDTO(String id) {
