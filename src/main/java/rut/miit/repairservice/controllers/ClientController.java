@@ -7,11 +7,13 @@ import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import rut.miit.repairservice.config.ActionLinkGenerator;
 import rut.miit.repairservice.dtos.main.ClientDTO;
 import rut.miit.repairservice.services.implementations.ClientServiceImpl;
 
+import java.util.HashMap;
 import java.util.List;
-
+import java.util.Map;
 
 @RestController
 @RequestMapping("/client")
@@ -29,21 +31,28 @@ public class ClientController {
         this.modelMapper = modelMapper;
     }
 
-
     @GetMapping("/{id}")
     public ResponseEntity<ClientDTO> getClientById(@PathVariable String id) {
         ClientDTO clientDTO = modelMapper.map(clientService.getClientById(id), ClientDTO.class);
 
-        clientDTO.add(WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder
-                .methodOn(ClientController.class)
-                .getClientById(id)).withSelfRel());
+        clientDTO.add(WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(ClientController.class).getClientById(id)).withSelfRel());
+        clientDTO.add(WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(ClientController.class).getAllClients()).withRel("all-clients"));
 
-        clientDTO.add(WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder
-                .methodOn(ClientController.class)
-                .getAllClients()).withRel("all-clients"));
+        Map<String, Map<String, String>> actions = new HashMap<>();
+
+        String baseUrl = "http://localhost:8081/client";
+
+        actions.put("get", ActionLinkGenerator.getAction(baseUrl, id));
+        actions.put("updateEmail", ActionLinkGenerator.createAction(baseUrl, "/update/email", id, "PUT"));
+        actions.put("updateName", ActionLinkGenerator.createAction(baseUrl, "/update/name", id, "PUT"));
+        actions.put("updatePhone", ActionLinkGenerator.createAction(baseUrl, "/update/phone", id, "PUT"));
+        actions.put("delete", ActionLinkGenerator.deleteAction(baseUrl, id));
+
+        clientDTO.setActions(actions);
 
         return ResponseEntity.ok(clientDTO);
     }
+
 
     @GetMapping("/all")
     public ResponseEntity<?> getAllClients() {
@@ -58,7 +67,22 @@ public class ClientController {
 
     @PostMapping("/add")
     public ResponseEntity<?> addClient(@RequestBody ClientDTO clientDTO) {
-        return ResponseEntity.ok(clientService.createClient(clientDTO));
+        ClientDTO createdClient = clientService.createClient(clientDTO);
+
+        String baseUrl = "http://localhost:8081/client";
+
+        Map<String, Map<String, String>> actions = new HashMap<>();
+
+        actions.put("get", ActionLinkGenerator.getAction(baseUrl, createdClient.getId()));
+
+        actions.put("updateEmail", ActionLinkGenerator.createAction(baseUrl, "/update/email", createdClient.getId(), "PUT"));
+        actions.put("updateName", ActionLinkGenerator.createAction(baseUrl, "/update/name", createdClient.getId(), "PUT"));
+        actions.put("updatePhone", ActionLinkGenerator.createAction(baseUrl, "/update/phone", createdClient.getId(), "PUT"));
+
+        actions.put("delete", ActionLinkGenerator.deleteAction(baseUrl, createdClient.getId()));
+        createdClient.setActions(actions);
+
+        return ResponseEntity.ok(createdClient);
     }
 
     @PutMapping("/update/name")
