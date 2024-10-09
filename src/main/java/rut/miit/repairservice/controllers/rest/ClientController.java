@@ -1,4 +1,4 @@
-package rut.miit.repairservice.controllers;
+package rut.miit.repairservice.controllers.rest;
 
 import jakarta.persistence.EntityNotFoundException;
 import org.modelmapper.ModelMapper;

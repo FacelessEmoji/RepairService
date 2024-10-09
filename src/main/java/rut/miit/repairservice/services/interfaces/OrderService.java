@@ -7,6 +7,11 @@ import rut.miit.repairservice.models.enums.StatusType;
 import java.util.List;
 
 public interface OrderService<ID> {
+    List<OrderDTO> getOrdersByClientId(ID clientId);
+    List<OrderDTO> getOrdersByMasterId(ID masterId);
+    List<OrderDTO> getOrdersByClientIdAndMasterId(ID clientId, ID masterId);
+    List<OrderDTO> getOrdersByStatus(StatusType status);
+
     List<OrderDTO> getAllOrders();
     Order getOrderById(ID id);
     OrderDTO createOrder(OrderDTO orderDTO);
@@ -14,8 +19,8 @@ public interface OrderService<ID> {
     void deleteOrder(ID id);
 
     OrderDTO updateOrderStatus(ID id, StatusType status);
-    OrderDTO assignMasterToOrder(ID orderId, String masterId);
-    OrderDTO assignClientToOrder(ID orderId, String clientId);
-    OrderDTO updateOrderDescription(ID orderId, String description);
+    OrderDTO assignMasterToOrder(ID orderId, ID masterId);
+    OrderDTO assignClientToOrder(ID orderId, ID clientId);
+    OrderDTO updateOrderDescription(ID orderId, ID description);
 }
 

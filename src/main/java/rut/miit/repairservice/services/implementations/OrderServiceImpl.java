@@ -104,5 +104,29 @@ public class OrderServiceImpl implements OrderService<String> {
         order.setDescription(description);
         return modelMapper.map(orderRepository.saveAndFlush(order), OrderDTO.class);
     }
+
+    @Override
+    public List<OrderDTO> getOrdersByClientId(String clientId) {
+        return orderRepository.findAllByClient_Id(clientId)
+                .stream().map(o -> modelMapper.map(o, OrderDTO.class)).collect(Collectors.toList());
+    }
+
+    @Override
+    public List<OrderDTO> getOrdersByMasterId(String masterId) {
+        return orderRepository.findAllByMaster_Id(masterId)
+                .stream().map(o -> modelMapper.map(o, OrderDTO.class)).collect(Collectors.toList());
+    }
+
+    @Override
+    public List<OrderDTO> getOrdersByClientIdAndMasterId(String clientId, String masterId) {
+        return orderRepository.findAllByClient_IdAndMaster_Id(clientId, masterId)
+                .stream().map(o -> modelMapper.map(o, OrderDTO.class)).collect(Collectors.toList());
+    }
+
+    @Override
+    public List<OrderDTO> getOrdersByStatus(StatusType status) {
+        return orderRepository.findAllByStatus(status)
+                .stream().map(o -> modelMapper.map(o, OrderDTO.class)).collect(Collectors.toList());
+    }
 }
 
