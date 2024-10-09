@@ -1,6 +1,7 @@
 type Query {
     clients(clientId: String): [Client]
     masters(masterId: String): [Master]
+    parts(partId: String): [Part]  # Добавляем запрос для частей
 }
 
 type Mutation {
@@ -17,6 +18,20 @@ type Mutation {
     updateMasterPhone(id: String!, phone: String!): Master
     updateMasterSpecialization(id: String!, specialization: SpecializationType!): Master
     deleteMaster(id: String!): String
+
+    # Part mutations
+    addPart(name: String!, quantity: Int!, price: Float!): Part
+    updatePartName(id: String!, name: String!): Part
+    updatePartQuantity(id: String!, quantity: Int!): Part
+    updatePartPrice(id: String!, price: Float!): Part
+    deletePart(id: String!): String
+}
+
+type Part {
+    id: ID
+    name: String
+    quantity: Int
+    price: Float
 }
 
 type Client {

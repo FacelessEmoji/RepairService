@@ -1,0 +1,64 @@
+# Запрос детали по ID
+query GetPartById {
+    parts(partId: "part123") {
+        id
+        name
+        quantity
+        price
+    }
+}
+
+# Запрос всех деталей
+query GetAllParts {
+    parts {
+        id
+        name
+        quantity
+        price
+    }
+}
+
+# Мутация для добавления детали
+mutation AddPart {
+    addPart(name: "Screen for Iphone 69", quantity: 10, price: 999.99) {
+        id
+        name
+        quantity
+        price
+    }
+}
+
+# Мутация для обновления имени детали
+mutation UpdatePartName {
+    updatePartName(id: "part123", name: "Wi-Fi chip") {
+        id
+        name
+        quantity
+        price
+    }
+}
+
+# Мутация для обновления количества детали
+mutation UpdatePartQuantity {
+    updatePartQuantity(id: "part123", quantity: 15) {
+        id
+        name
+        quantity
+        price
+    }
+}
+
+# Мутация для обновления цены детали
+mutation UpdatePartPrice {
+    updatePartPrice(id: "part123", price: 6.49) {
+        id
+        name
+        quantity
+        price
+    }
+}
+
+# Мутация для удаления детали
+mutation DeletePart {
+    deletePart(id: "part123")
+}
