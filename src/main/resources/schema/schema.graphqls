@@ -1,13 +1,22 @@
 type Query {
     clients(clientId: String): [Client]
+    masters(masterId: String): [Master]
 }
 
 type Mutation {
+    # Client mutations
     addClient(firstName: String!, phoneNumber: String!, email: String!): Client
     updateClientName(id: ID!, name: String!): Client
     updateClientPhone(id: ID!, phoneNumber: String!): Client
     updateClientEmail(id: ID!, email: String!): Client
     deleteClient(id: ID!): String
+
+    # Master mutations
+    addMaster(firstName: String!, phoneNumber: String!, specialization: SpecializationType!): Master
+    updateMasterName(id: String!, name: String!): Master
+    updateMasterPhone(id: String!, phone: String!): Master
+    updateMasterSpecialization(id: String!, specialization: SpecializationType!): Master
+    deleteMaster(id: String!): String
 }
 
 type Client {
@@ -15,4 +24,25 @@ type Client {
     firstName: String
     phoneNumber: String
     email: String
+}
+
+type Master {
+    id: ID
+    firstName: String
+    phoneNumber: String
+    specialization: SpecializationType
+}
+
+input MasterInput {
+    firstName: String!
+    phoneNumber: String!
+    specialization: SpecializationType!
+}
+
+enum SpecializationType {
+    PHONES        # Телефоны
+    COMPUTERS     # Компьютеры
+    TELEVISIONS   # Телевизоры
+    APPLIANCES    # Бытовая техника
+    UNIVERSAL     # Универсальная специализация
 }

@@ -1,0 +1,64 @@
+# Запрос мастера по ID
+query GetMasterById {
+    masters(masterId: "0a161600-9270-1dd0-8192-70ddd8840000") {
+        id
+        firstName
+        phoneNumber
+        specialization
+    }
+}
+
+# Запрос всех мастеров
+query GetAllMasters {
+    masters {
+        id
+        firstName
+        phoneNumber
+        specialization
+    }
+}
+
+# Мутация для добавления мастера
+mutation AddMaster {
+    addMaster(firstName: "Alice", phoneNumber: "+123456789", specialization: PHONES) {
+        id
+        firstName
+        phoneNumber
+        specialization
+    }
+}
+
+# Мутация для обновления имени мастера
+mutation UpdateMasterName {
+    updateMasterName(id: "master-id-123", name: "Bob") {
+        id
+        firstName
+        phoneNumber
+        specialization
+    }
+}
+
+# Мутация для обновления телефона мастера
+mutation UpdateMasterPhone {
+    updateMasterPhone(id: "master-id-123", phone: "+987654321") {
+        id
+        firstName
+        phoneNumber
+        specialization
+    }
+}
+
+# Мутация для обновления специализации мастера
+mutation UpdateMasterSpecialization {
+    updateMasterSpecialization(id: "0a161600-9270-1dd0-8192-70deaa5c0005", specialization: COMPUTERS) {
+        id
+        firstName
+        phoneNumber
+        specialization
+    }
+}
+
+# Мутация для удаления мастера
+mutation DeleteMaster {
+    deleteMaster(id: "master-id-123")
+}

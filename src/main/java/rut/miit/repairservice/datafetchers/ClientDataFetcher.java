@@ -12,12 +12,16 @@ import java.util.List;
 
 @DgsComponent
 public class ClientDataFetcher {
-    private final ClientServiceImpl clientService;
-    private final ModelMapper modelMapper;
+    private ClientServiceImpl clientService;
+    private ModelMapper modelMapper;
 
     @Autowired
-    public ClientDataFetcher(ClientServiceImpl clientService, ModelMapper modelMapper) {
+    public void setClientService(ClientServiceImpl clientService) {
         this.clientService = clientService;
+    }
+
+    @Autowired
+    public void setModelMapper(ModelMapper modelMapper) {
         this.modelMapper = modelMapper;
     }
 
