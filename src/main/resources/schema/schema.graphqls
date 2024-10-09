@@ -1,12 +1,12 @@
 type Query {
     orders(orderId: String): [Order]
-    ordersByClientId(clientId: String): [Order]   # Новый запрос для получения заказов по clientId
-    ordersByMasterId(masterId: String): [Order]   # Новый запрос для получения заказов по masterId
-    ordersByClientIdAndMasterId(clientId: String, masterId: String): [Order]  # Новый запрос для получения заказов по clientId и masterId
-    ordersByStatus(status: StatusType): [Order]   # Новый запрос для получения заказов по статусу
+    ordersByClientId(clientId: String): [Order]
+    ordersByMasterId(masterId: String): [Order]
+    ordersByClientIdAndMasterId(clientId: String, masterId: String): [Order]
+    ordersByStatus(status: StatusType): [Order]
     clients(clientId: String): [Client]
     masters(masterId: String): [Master]
-    parts(partId: String): [Part]  # Запрос для деталей
+    parts(partId: String): [Part]
 }
 
 type Mutation {

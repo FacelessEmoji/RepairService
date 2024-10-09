@@ -30,7 +30,7 @@ mutation AddClient {
 
 # Мутация для обновления имени клиента
 mutation UpdateClientName {
-    updateClientName(id: "fdjhhd", name: "Jane Doe") {
+    updateClientName(id: "0af544b7-9271-1e50-8192-713e60810001", name: "Jane Doe") {
         id
         firstName
         phoneNumber
@@ -40,7 +40,7 @@ mutation UpdateClientName {
 
 # Мутация для обновления телефона клиента
 mutation UpdateClientPhone {
-    updateClientPhone(id: "fdjhhd", phoneNumber: "+987654321") {
+    updateClientPhone(id: "0af544b7-9271-1e50-8192-713e60810001", phoneNumber: "+987654321") {
         id
         firstName
         phoneNumber
@@ -60,5 +60,5 @@ mutation UpdateClientEmail {
 
 # Мутация для удаления клиента
 mutation DeleteClient {
-    deleteClient(id: "fdjhhd")
+    deleteClient(id: "0af544b7-9271-1e50-8192-713e60810001")
 }
