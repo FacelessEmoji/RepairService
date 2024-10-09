@@ -2,7 +2,17 @@ type Query {
     clients(clientId: String): [Client]
 }
 
+type Mutation {
+    addClient(firstName: String!, phoneNumber: String!, email: String!): Client
+    updateClientName(id: ID!, name: String!): Client
+    updateClientPhone(id: ID!, phoneNumber: String!): Client
+    updateClientEmail(id: ID!, email: String!): Client
+    deleteClient(id: ID!): String
+}
+
 type Client {
     id: ID
     firstName: String
+    phoneNumber: String
+    email: String
 }

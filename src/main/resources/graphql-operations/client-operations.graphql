@@ -1,0 +1,64 @@
+# Запрос клиента по ID
+query GetClientById {
+    clients(clientId: "fdjhhd") {
+        id
+        firstName
+        phoneNumber
+        email
+    }
+}
+
+# Запрос всех клиентов
+query GetAllClients {
+    clients {
+        id
+        firstName
+        phoneNumber
+        email
+    }
+}
+
+# Мутация для добавления клиента
+mutation AddClient {
+    addClient(firstName: "John", phoneNumber: "+123456789", email: "john@example.com") {
+        id
+        firstName
+        phoneNumber
+        email
+    }
+}
+
+# Мутация для обновления имени клиента
+mutation UpdateClientName {
+    updateClientName(id: "fdjhhd", name: "Jane Doe") {
+        id
+        firstName
+        phoneNumber
+        email
+    }
+}
+
+# Мутация для обновления телефона клиента
+mutation UpdateClientPhone {
+    updateClientPhone(id: "fdjhhd", phoneNumber: "+987654321") {
+        id
+        firstName
+        phoneNumber
+        email
+    }
+}
+
+# Мутация для обновления email клиента
+mutation UpdateClientEmail {
+    updateClientEmail(id: "fdjhhd", email: "jane.doe@example.com") {
+        id
+        firstName
+        phoneNumber
+        email
+    }
+}
+
+# Мутация для удаления клиента
+mutation DeleteClient {
+    deleteClient(id: "fdjhhd")
+}
