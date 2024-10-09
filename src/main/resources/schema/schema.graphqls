@@ -1,10 +1,22 @@
 type Query {
+    orders(orderId: String): [Order]
+    ordersByClientId(clientId: String): [Order]   # Новый запрос для получения заказов по clientId
+    ordersByMasterId(masterId: String): [Order]   # Новый запрос для получения заказов по masterId
+    ordersByClientIdAndMasterId(clientId: String, masterId: String): [Order]  # Новый запрос для получения заказов по clientId и masterId
+    ordersByStatus(status: StatusType): [Order]   # Новый запрос для получения заказов по статусу
     clients(clientId: String): [Client]
     masters(masterId: String): [Master]
-    parts(partId: String): [Part]  # Добавляем запрос для частей
+    parts(partId: String): [Part]  # Запрос для деталей
 }
 
 type Mutation {
+    # Order mutations
+    addOrder(description: String!, status: StatusType!, client: String, master: String): Order
+    updateOrderStatus(id: ID!, status: StatusType!): Order
+    assignMaster(id: ID!, masterId: String!): Order
+    assignClient(id: ID!, clientId: String!): Order
+    deleteOrder(id: ID!): String
+
     # Client mutations
     addClient(firstName: String!, phoneNumber: String!, email: String!): Client
     updateClientName(id: ID!, name: String!): Client
@@ -25,6 +37,14 @@ type Mutation {
     updatePartQuantity(id: String!, quantity: Int!): Part
     updatePartPrice(id: String!, price: Float!): Part
     deletePart(id: String!): String
+}
+
+type Order {
+    id: ID
+    description: String
+    status: StatusType
+    client: String
+    master: String
 }
 
 type Part {
@@ -60,4 +80,11 @@ enum SpecializationType {
     TELEVISIONS   # Телевизоры
     APPLIANCES    # Бытовая техника
     UNIVERSAL     # Универсальная специализация
+}
+
+enum StatusType {
+    PROCESSING    # Обрабатывается
+    ACCEPTED      # Принят
+    CANCELLED     # Отменен
+    READY         # Готов
 }

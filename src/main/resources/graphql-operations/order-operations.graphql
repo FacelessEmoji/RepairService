@@ -1,0 +1,114 @@
+# Запрос всех заказов
+query GetAllOrders {
+    orders {
+        id
+        description
+        status
+        client
+        master
+    }
+}
+
+# Запрос заказа по ID
+query GetOrderById {
+    orders(orderId: "order123") {
+        id
+        description
+        status
+        client
+        master
+    }
+}
+
+# Запрос заказов по clientId
+query GetOrdersByClientId {
+    ordersByClientId(clientId: "client123") {
+        id
+        description
+        status
+        client
+        master
+    }
+}
+
+# Запрос заказов по masterId
+query GetOrdersByMasterId {
+    ordersByMasterId(masterId: "master123") {
+        id
+        description
+        status
+        client
+        master
+    }
+}
+
+# Запрос заказов по clientId и masterId
+query GetOrdersByClientAndMaster {
+    ordersByClientIdAndMasterId(clientId: "client123", masterId: "master123") {
+        id
+        description
+        status
+        client
+        master
+    }
+}
+
+# Запрос заказов по статусу
+query GetOrdersByStatus {
+    ordersByStatus(status: ACCEPTED) {
+        id
+        description
+        status
+        client
+        master
+    }
+}
+
+# Мутация для добавления заказа
+mutation AddOrder {
+    addOrder(description: "Fix the phone", status: PROCESSING, client: "client123", master: "master123") {
+        id
+        description
+        status
+        client
+        master
+    }
+}
+
+# Мутация для обновления статуса заказа
+mutation UpdateOrderStatus {
+    updateOrderStatus(id: "order123", status: ACCEPTED) {
+        id
+        description
+        status
+        client
+        master
+    }
+}
+
+# Мутация для назначения мастера на заказ
+mutation AssignMaster {
+    assignMaster(id: "order123", masterId: "master123") {
+        id
+        description
+        status
+        client
+        master
+    }
+}
+
+# Мутация для назначения клиента на заказ
+mutation AssignClient {
+    assignClient(id: "order123", clientId: "client123") {
+        id
+        description
+        status
+        client
+        master
+    }
+}
+
+# Мутация для удаления заказа
+mutation DeleteOrder {
+    deleteOrder(id: "order123")
+}
