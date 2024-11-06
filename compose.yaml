@@ -2,6 +2,7 @@ services:
   postgres:
     container_name: service_db
     image: postgres:latest
+    restart: no
     environment:
       - POSTGRES_DB=service_db
       - POSTGRES_PASSWORD=root
@@ -11,8 +12,9 @@ services:
   rabbitmq:
     container_name: rabbitmq
     image: rabbitmq:latest
+    restart: no
     environment:
       - RABBITMQ_DEFAULT_PASS=root
       - RABBITMQ_DEFAULT_USER=admin
     ports:
-      - 5672
+      - 5672:5672

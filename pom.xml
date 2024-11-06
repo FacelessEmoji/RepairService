@@ -133,11 +133,6 @@
             <artifactId>spring-rabbit-test</artifactId>
             <scope>test</scope>
         </dependency>
-<!--        <dependency>-->
-<!--            <groupId>org.springframework.graphql</groupId>-->
-<!--            <artifactId>spring-graphql-test</artifactId>-->
-<!--            <scope>test</scope>-->
-<!--        </dependency>-->
 
         <dependency>
             <groupId>com.netflix.graphql.dgs</groupId>
