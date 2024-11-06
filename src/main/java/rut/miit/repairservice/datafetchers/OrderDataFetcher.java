@@ -62,7 +62,7 @@ public class OrderDataFetcher {
             @InputArgument String client,
             @InputArgument String master) {
 
-        OrderDTO newOrder = new OrderDTO(description, status, client, master);
+        OrderDTO newOrder = new OrderDTO(description, status, null, client, master);
         return orderService.createOrder(newOrder);
     }
 

@@ -1,8 +1,10 @@
 package rut.miit.repairservice.services.implementations;
 
 import org.modelmapper.ModelMapper;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import rut.miit.repairservice.config.RabbitMQConfiguration;
 import rut.miit.repairservice.dtos.main.OrderDTO;
 import rut.miit.repairservice.models.entities.Order;
 import rut.miit.repairservice.models.enums.StatusType;
@@ -20,6 +22,7 @@ public class OrderServiceImpl implements OrderService<String> {
     private MasterRepository masterRepository;
     private ClientRepository clientRepository;
     private ModelMapper modelMapper;
+    private RabbitTemplate rabbitTemplate;
 
 
     @Autowired
@@ -42,6 +45,11 @@ public class OrderServiceImpl implements OrderService<String> {
         this.modelMapper = modelMapper;
     }
 
+    @Autowired
+    public void setRabbitTemplate(RabbitTemplate rabbitTemplate) {
+        this.rabbitTemplate = rabbitTemplate;
+    }
+
     @Override
     public List<OrderDTO> getAllOrders() {
         return orderRepository.findAll().stream()
@@ -59,7 +67,15 @@ public class OrderServiceImpl implements OrderService<String> {
         Order order = modelMapper.map(orderDTO, Order.class);
         order.setClient(clientRepository.findById(orderDTO.getClient()).orElse(null));
         order.setMaster(masterRepository.findById(orderDTO.getMaster()).orElse(null));
-        return modelMapper.map(orderRepository.saveAndFlush(modelMapper.map(order, Order.class)), OrderDTO.class);
+
+        // Сохраняем и конвертируем обратно в DTO
+        Order savedOrder = orderRepository.saveAndFlush(order);
+        OrderDTO savedOrderDTO = modelMapper.map(savedOrder, OrderDTO.class);
+
+        // Отправляем сообщение с ID заказа
+        rabbitTemplate.convertAndSend(RabbitMQConfiguration.EXCHANGE_NAME, "order.created", savedOrder.getId());
+
+        return savedOrderDTO;
     }
 
     @Override

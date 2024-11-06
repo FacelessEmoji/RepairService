@@ -6,5 +6,6 @@ import rut.miit.repairservice.models.entities.Master;
 
 @Repository
 public interface MasterRepository extends JpaRepository<Master, String> {
+//    TODO: Получить самого разгруженного мастера по определенной специальности. Для RMQ
 
 }

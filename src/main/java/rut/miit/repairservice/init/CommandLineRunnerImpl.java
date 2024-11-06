@@ -38,14 +38,9 @@ public class CommandLineRunnerImpl implements CommandLineRunner {
         masterService.createMaster(new MasterDTO("Gleb", "88005553535", SpecializationType.COMPUTERS));
         clientService.createClient(new ClientDTO("Nick", "123456789", "example@test.ru"));
         partService.createPart(new PartDTO("some battery", 3, new BigDecimal(5000)));
-        orderService.createOrder(new OrderDTO("test description", StatusType.ACCEPTED,
+        orderService.createOrder(new OrderDTO("test description", StatusType.ACCEPTED, null,
                 clientService.getAllClients().get(0).getId(), masterService.getAllMasters().get(0).getId()));
         orderPartService.createOrderPart(new OrderPartDTO(orderService.getAllOrders().get(0).getId(),
                 partService.getAllParts().get(0).getId(), 1));
-
-        System.out.println("Sending message...");
-
-        // Отправка сообщения через RabbitTemplate
-        rabbitTemplate.convertAndSend(RabbitMQConfiguration.EXCHANGE_NAME, "foo.bar.baz", "Hello from RabbitMQ!");
     }
 }
