@@ -11,7 +11,7 @@ type Query {
 
 type Mutation {
     # Order mutations
-    addOrder(description: String!, status: StatusType!, client: String, master: String): Order
+    addOrder(description: String!, status: StatusType!, requiredParts: String, client: String, master: String): Order
     updateOrderStatus(id: ID!, status: StatusType!): Order
     assignMaster(id: ID!, masterId: String!): Order
     assignClient(id: ID!, clientId: String!): Order
@@ -43,6 +43,7 @@ type Order {
     id: ID
     description: String
     status: StatusType
+    requiredParts: String
     client: String
     master: String
 }

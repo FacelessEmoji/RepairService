@@ -68,15 +68,18 @@ public class OrderServiceImpl implements OrderService<String> {
         order.setClient(clientRepository.findById(orderDTO.getClient()).orElse(null));
         order.setMaster(masterRepository.findById(orderDTO.getMaster()).orElse(null));
 
-        // Сохраняем и конвертируем обратно в DTO
         Order savedOrder = orderRepository.saveAndFlush(order);
         OrderDTO savedOrderDTO = modelMapper.map(savedOrder, OrderDTO.class);
 
-        // Отправляем сообщение с ID заказа
-        rabbitTemplate.convertAndSend(RabbitMQConfiguration.EXCHANGE_NAME, "order.created", savedOrder.getId());
+        // Отправка сообщения в очередь для расчета цены
+        rabbitTemplate.convertAndSend(RabbitMQConfiguration.EXCHANGE_NAME, "order.price", savedOrder.getId());
+
+        // Отправка сообщения в очередь для проверки наличия запчастей
+        rabbitTemplate.convertAndSend(RabbitMQConfiguration.EXCHANGE_NAME, "order.parts", savedOrder.getId());
 
         return savedOrderDTO;
     }
+
 
     @Override
     public OrderDTO updateOrder(String s, OrderDTO orderDTO) {

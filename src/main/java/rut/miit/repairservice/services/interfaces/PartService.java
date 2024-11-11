@@ -16,5 +16,7 @@ public interface PartService<ID> {
     PartDTO updatePartName(ID id, String name);
     PartDTO updatePartQuantity(ID id, Integer quantity);
     PartDTO updatePartPrice(ID id, BigDecimal price);
+
+    PartDTO getPartByName(String name);
 }
 

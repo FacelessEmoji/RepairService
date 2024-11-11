@@ -59,10 +59,11 @@ public class OrderDataFetcher {
     public OrderDTO addOrder(
             @InputArgument String description,
             @InputArgument StatusType status,
+            @InputArgument String requiredParts,
             @InputArgument String client,
             @InputArgument String master) {
 
-        OrderDTO newOrder = new OrderDTO(description, status, null, client, master);
+        OrderDTO newOrder = new OrderDTO(description, status, null, requiredParts,  client, master);
         return orderService.createOrder(newOrder);
     }
 

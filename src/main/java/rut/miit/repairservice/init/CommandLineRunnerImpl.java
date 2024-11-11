@@ -4,7 +4,6 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
-import rut.miit.repairservice.config.RabbitMQConfiguration;
 import rut.miit.repairservice.dtos.main.*;
 import rut.miit.repairservice.models.enums.SpecializationType;
 import rut.miit.repairservice.models.enums.StatusType;
@@ -38,7 +37,7 @@ public class CommandLineRunnerImpl implements CommandLineRunner {
         masterService.createMaster(new MasterDTO("Gleb", "88005553535", SpecializationType.COMPUTERS));
         clientService.createClient(new ClientDTO("Nick", "123456789", "example@test.ru"));
         partService.createPart(new PartDTO("some battery", 3, new BigDecimal(5000)));
-        orderService.createOrder(new OrderDTO("test description", StatusType.ACCEPTED, null,
+        orderService.createOrder(new OrderDTO("test description", StatusType.ACCEPTED, null, "Iphone 69 Ultra Max Screen;Iphone 69 Ultra Max Dynamic",
                 clientService.getAllClients().get(0).getId(), masterService.getAllMasters().get(0).getId()));
         orderPartService.createOrderPart(new OrderPartDTO(orderService.getAllOrders().get(0).getId(),
                 partService.getAllParts().get(0).getId(), 1));

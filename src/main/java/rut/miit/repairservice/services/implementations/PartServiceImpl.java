@@ -76,6 +76,13 @@ public class PartServiceImpl implements PartService<String> {
 
     @Override
     public PartDTO updatePartPrice(String s, BigDecimal price) {
-        return null;
+        Part part = partRepository.findById(s).orElseThrow();
+        part.setPrice(price);
+        return modelMapper.map(partRepository.saveAndFlush(part), PartDTO.class);
+    }
+
+    @Override
+    public PartDTO getPartByName(String name) {
+        return modelMapper.map(partRepository.findByName(name), PartDTO.class);
     }
 }

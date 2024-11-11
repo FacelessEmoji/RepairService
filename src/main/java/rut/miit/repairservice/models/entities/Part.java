@@ -13,10 +13,10 @@ public class Part extends BaseEntity {
     @Column(name = "name", length = 255, nullable = false)
     private String name;
 
-    @Column(name = "quantity", length = 4, nullable = false)
+    @Column(name = "quantity", length = 4, nullable = false, columnDefinition = "integer DEFAULT 1")
     private Integer quantity;
 
-    @Column(name = "price", columnDefinition = "numeric(8,2)", nullable = false)
+    @Column(name = "price", columnDefinition = "numeric(8,2) DEFAULT 1.00", nullable = false)
     private BigDecimal price;
 
     @OneToMany(mappedBy = "part", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)

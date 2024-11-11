@@ -19,6 +19,9 @@ public class Order extends TimestampedEntity {
     @Column(name = "status",length = 15, nullable = false)
     private StatusType status;
 
+    @Column(name = "required_parts", columnDefinition = "text")
+    private String requiredParts;
+
     @Column(name = "estimated_completion_time")
     private LocalDateTime estimatedCompletionTime;
 
@@ -33,10 +36,11 @@ public class Order extends TimestampedEntity {
     @OneToMany(mappedBy = "order", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<OrderPart> orderParts = new ArrayList<>();
 
-    public Order(String description, StatusType status, LocalDateTime estimatedCompletionTime, Client client, Master master) {
+    public Order(String description, StatusType status, LocalDateTime estimatedCompletionTime, String requiredParts, Client client, Master master) {
         this.description = description;
         this.status = status;
         this.estimatedCompletionTime = estimatedCompletionTime;
+        this.requiredParts = requiredParts;
         this.client = client;
         this.master = master;
     }
@@ -67,6 +71,14 @@ public class Order extends TimestampedEntity {
 
     public void setEstimatedCompletionTime(LocalDateTime estimatedCompletionTime) {
         this.estimatedCompletionTime = estimatedCompletionTime;
+    }
+
+    public String getRequiredParts() {
+        return requiredParts;
+    }
+
+    public void setRequiredParts(String requiredParts) {
+        this.requiredParts = requiredParts;
     }
 
     public Master getMaster() {
