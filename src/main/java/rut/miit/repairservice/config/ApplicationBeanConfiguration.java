@@ -1,5 +1,7 @@
 package rut.miit.repairservice.config;
 
+import io.swagger.v3.oas.models.OpenAPI;
+import io.swagger.v3.oas.models.info.Info;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeMap;
 import org.springframework.context.annotation.Bean;
@@ -11,6 +13,14 @@ import rut.miit.repairservice.models.entities.OrderPart;
 
 @Configuration
 public class ApplicationBeanConfiguration {
+
+    @Bean
+    public OpenAPI customOpenAPI() {
+        return new OpenAPI()
+                .info(new Info()
+                        .title("Repair Service API")
+                        .description("API Documentation for Repair Service"));
+    }
 
     @Bean
     public ModelMapper modelMapper(){

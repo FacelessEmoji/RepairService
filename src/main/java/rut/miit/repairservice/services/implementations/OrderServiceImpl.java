@@ -71,10 +71,8 @@ public class OrderServiceImpl implements OrderService<String> {
         Order savedOrder = orderRepository.saveAndFlush(order);
         OrderDTO savedOrderDTO = modelMapper.map(savedOrder, OrderDTO.class);
 
-        // Отправка сообщения в очередь для расчета цены
         rabbitTemplate.convertAndSend(RabbitMQConfiguration.EXCHANGE_NAME, "order.price", savedOrder.getId());
 
-        // Отправка сообщения в очередь для проверки наличия запчастей
         rabbitTemplate.convertAndSend(RabbitMQConfiguration.EXCHANGE_NAME, "order.parts", savedOrder.getId());
 
         return savedOrderDTO;
