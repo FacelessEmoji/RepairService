@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import rut.miit.repairservice.dtos.main.ClientDTO;
+import rut.miit.repairservice.grpc.GrpcLoggingClient;
 import rut.miit.repairservice.models.entities.Client;
 import rut.miit.repairservice.repositories.ClientRepository;
 import rut.miit.repairservice.services.interfaces.ClientService;
@@ -16,10 +17,16 @@ import java.util.stream.Collectors;
 public class ClientServiceImpl implements ClientService<String> {
     private ClientRepository clientRepository;
     private ModelMapper modelMapper;
+    private GrpcLoggingClient grpcLoggingClient;
 
     @Autowired
     public void setClientRepository(ClientRepository clientRepository) {
         this.clientRepository = clientRepository;
+    }
+
+    @Autowired
+    public void setGrpcLoggingClient(GrpcLoggingClient grpcLoggingClient) {
+        this.grpcLoggingClient = grpcLoggingClient;
     }
 
     @Autowired
@@ -40,7 +47,19 @@ public class ClientServiceImpl implements ClientService<String> {
 
     @Override
     public ClientDTO createClient(ClientDTO clientDTO) {
-        return modelMapper.map(clientRepository.saveAndFlush(modelMapper.map(clientDTO, Client.class)), ClientDTO.class);
+        Client savedClient = clientRepository.saveAndFlush(modelMapper.map(clientDTO, Client.class));
+        ClientDTO result = modelMapper.map(savedClient, ClientDTO.class);
+
+        // Отправка лога в gRPC-сервис
+        grpcLoggingClient.logAction(
+                "CREATE",
+                "Client",
+                savedClient.getId(),       // Используем ID сохраненного клиента
+                "System",                  // Замените "System" на идентификатор пользователя, если есть
+                java.time.ZonedDateTime.now().toString() // Текущее время в формате ISO
+        );
+
+        return result;
     }
 
     @Override
@@ -53,8 +72,17 @@ public class ClientServiceImpl implements ClientService<String> {
     }
 
     @Override
-    public void deleteClient(String s) {
-        clientRepository.deleteById(s);
+    public void deleteClient(String clientId) {
+        clientRepository.deleteById(clientId);
+
+        // Отправка лога в gRPC-сервис
+        grpcLoggingClient.logAction(
+                "DELETE",
+                "Client",
+                clientId,
+                "System",                  // Замените "System" на идентификатор пользователя, если есть
+                java.time.ZonedDateTime.now().toString() // Текущее время в формате ISO
+        );
     }
 
     @Override

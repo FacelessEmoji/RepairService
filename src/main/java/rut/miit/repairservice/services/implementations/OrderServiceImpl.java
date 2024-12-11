@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import rut.miit.repairservice.config.RabbitMQConfiguration;
 import rut.miit.repairservice.dtos.main.OrderDTO;
+import rut.miit.repairservice.grpc.GrpcLoggingClient;
 import rut.miit.repairservice.models.entities.Order;
 import rut.miit.repairservice.models.enums.StatusType;
 import rut.miit.repairservice.repositories.ClientRepository;
@@ -23,6 +24,7 @@ public class OrderServiceImpl implements OrderService<String> {
     private ClientRepository clientRepository;
     private ModelMapper modelMapper;
     private RabbitTemplate rabbitTemplate;
+    private GrpcLoggingClient grpcLoggingClient;
 
 
     @Autowired
@@ -50,6 +52,11 @@ public class OrderServiceImpl implements OrderService<String> {
         this.rabbitTemplate = rabbitTemplate;
     }
 
+    @Autowired
+    public void setGrpcLoggingClient(GrpcLoggingClient grpcLoggingClient) {
+        this.grpcLoggingClient = grpcLoggingClient;
+    }
+
     @Override
     public List<OrderDTO> getAllOrders() {
         return orderRepository.findAll().stream()
@@ -72,8 +79,15 @@ public class OrderServiceImpl implements OrderService<String> {
         OrderDTO savedOrderDTO = modelMapper.map(savedOrder, OrderDTO.class);
 
         rabbitTemplate.convertAndSend(RabbitMQConfiguration.EXCHANGE_NAME, "order.price", savedOrder.getId());
-
         rabbitTemplate.convertAndSend(RabbitMQConfiguration.EXCHANGE_NAME, "order.parts", savedOrder.getId());
+
+        grpcLoggingClient.logAction(
+                "CREATE",
+                "Order",
+                savedOrder.getId(),
+                "System",
+                java.time.ZonedDateTime.now().toString()
+        );
 
         return savedOrderDTO;
     }
@@ -86,12 +100,31 @@ public class OrderServiceImpl implements OrderService<String> {
         order.setStatus(orderDTO.getStatus());
         order.setClient(clientRepository.findById(order.getClient().getId()).orElseThrow());
         order.setMaster(masterRepository.findById(order.getMaster().getId()).orElseThrow());
-        return modelMapper.map(orderRepository.saveAndFlush(order), OrderDTO.class);
+
+        Order updatedOrder = orderRepository.saveAndFlush(order);
+
+        grpcLoggingClient.logAction(
+                "UPDATE",
+                "Order",
+                updatedOrder.getId(),
+                "System",
+                java.time.ZonedDateTime.now().toString()
+        );
+
+        return modelMapper.map(updatedOrder, OrderDTO.class);
     }
 
     @Override
     public void deleteOrder(String s) {
         orderRepository.deleteById(s);
+
+        grpcLoggingClient.logAction(
+                "DELETE",
+                "Order",
+                s,
+                "System",
+                java.time.ZonedDateTime.now().toString()
+        );
     }
 
     @Override

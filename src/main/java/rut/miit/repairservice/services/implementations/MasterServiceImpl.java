@@ -4,6 +4,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import rut.miit.repairservice.dtos.main.MasterDTO;
+import rut.miit.repairservice.grpc.GrpcLoggingClient;
 import rut.miit.repairservice.models.entities.Master;
 import rut.miit.repairservice.models.enums.SpecializationType;
 import rut.miit.repairservice.repositories.MasterRepository;
@@ -16,6 +17,7 @@ import java.util.stream.Collectors;
 public class MasterServiceImpl implements MasterService<String> {
     private MasterRepository masterRepository;
     private ModelMapper modelMapper;
+    private GrpcLoggingClient grpcLoggingClient;
 
     @Autowired
     public void setMasterRepository(MasterRepository masterRepository) {
@@ -25,6 +27,11 @@ public class MasterServiceImpl implements MasterService<String> {
     @Autowired
     public void setModelMapper(ModelMapper modelMapper) {
         this.modelMapper = modelMapper;
+    }
+
+    @Autowired
+    public void setGrpcLoggingClient(GrpcLoggingClient grpcLoggingClient) {
+        this.grpcLoggingClient = grpcLoggingClient;
     }
 
     @Override
@@ -43,7 +50,17 @@ public class MasterServiceImpl implements MasterService<String> {
     public MasterDTO createMaster(MasterDTO masterDTO) {
         Master master = modelMapper.map(masterDTO, Master.class);
         master = masterRepository.saveAndFlush(master);
-        return modelMapper.map(master, MasterDTO.class);
+        MasterDTO result = modelMapper.map(master, MasterDTO.class);
+
+        grpcLoggingClient.logAction(
+                "CREATE",
+                "Master",
+                master.getId(),
+                "System",
+                java.time.ZonedDateTime.now().toString()
+        );
+
+        return result;
     }
 
     @Override
@@ -58,8 +75,15 @@ public class MasterServiceImpl implements MasterService<String> {
     @Override
     public void deleteMaster(String s) {
         masterRepository.deleteById(s);
-    }
 
+        grpcLoggingClient.logAction(
+                "DELETE",
+                "Master",
+                s,
+                "System",
+                java.time.ZonedDateTime.now().toString()
+        );
+    }
     @Override
     public MasterDTO updateMasterName(String s, String name) {
         Master master = masterRepository.findById(s).orElseThrow();

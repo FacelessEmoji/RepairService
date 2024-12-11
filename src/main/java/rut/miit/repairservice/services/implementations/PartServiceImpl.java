@@ -4,6 +4,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import rut.miit.repairservice.dtos.main.PartDTO;
+import rut.miit.repairservice.grpc.GrpcLoggingClient;
 import rut.miit.repairservice.models.entities.Part;
 import rut.miit.repairservice.repositories.PartRepository;
 import rut.miit.repairservice.services.interfaces.PartService;
@@ -16,6 +17,7 @@ import java.util.stream.Collectors;
 public class PartServiceImpl implements PartService<String> {
     private PartRepository partRepository;
     private ModelMapper modelMapper;
+    private GrpcLoggingClient grpcLoggingClient;
 
     @Autowired
     public void setPartRepository(PartRepository partRepository) {
@@ -25,6 +27,11 @@ public class PartServiceImpl implements PartService<String> {
     @Autowired
     public void setModelMapper(ModelMapper modelMapper) {
         this.modelMapper = modelMapper;
+    }
+
+    @Autowired
+    public void setGrpcLoggingClient(GrpcLoggingClient grpcLoggingClient) {
+        this.grpcLoggingClient = grpcLoggingClient;
     }
 
     @Override
@@ -43,7 +50,17 @@ public class PartServiceImpl implements PartService<String> {
     public PartDTO createPart(PartDTO partDTO) {
         Part part = modelMapper.map(partDTO, Part.class);
         part = partRepository.saveAndFlush(part);
-        return modelMapper.map(part, PartDTO.class);
+        PartDTO result = modelMapper.map(part, PartDTO.class);
+
+        grpcLoggingClient.logAction(
+                "CREATE",
+                "Part",
+                part.getId(),
+                "System",
+                java.time.ZonedDateTime.now().toString()
+        );
+
+        return result;
     }
 
     @Override
@@ -52,12 +69,30 @@ public class PartServiceImpl implements PartService<String> {
         part.setName(partDTO.getName());
         part.setQuantity(partDTO.getQuantity());
         part.setPrice(partDTO.getPrice());
-        return modelMapper.map(partRepository.saveAndFlush(part), PartDTO.class);
+        Part updatedPart = partRepository.saveAndFlush(part);
+
+        grpcLoggingClient.logAction(
+                "UPDATE",
+                "Part",
+                updatedPart.getId(),
+                "System",
+                java.time.ZonedDateTime.now().toString()
+        );
+
+        return modelMapper.map(updatedPart, PartDTO.class);
     }
 
     @Override
     public void deletePart(String s) {
         partRepository.deleteById(s);
+
+        grpcLoggingClient.logAction(
+                "DELETE",
+                "Part",
+                s,
+                "System",
+                java.time.ZonedDateTime.now().toString()
+        );
     }
 
     @Override
