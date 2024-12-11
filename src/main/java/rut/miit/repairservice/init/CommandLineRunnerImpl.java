@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 import rut.miit.repairservice.dtos.main.*;
+import rut.miit.repairservice.grpc.GrpcLoggingClient;
 import rut.miit.repairservice.models.enums.SpecializationType;
 import rut.miit.repairservice.models.enums.StatusType;
 import rut.miit.repairservice.services.interfaces.*;
@@ -31,6 +32,10 @@ public class CommandLineRunnerImpl implements CommandLineRunner {
     @Autowired
     private RabbitTemplate rabbitTemplate;
 
+    @Autowired
+    private GrpcLoggingClient grpcLoggingClient;
+
+
     @Override
     public void run(String... args) throws Exception {
         // Создание тестовых данных
@@ -41,5 +46,8 @@ public class CommandLineRunnerImpl implements CommandLineRunner {
                 clientService.getAllClients().get(0).getId(), masterService.getAllMasters().get(0).getId()));
         orderPartService.createOrderPart(new OrderPartDTO(orderService.getAllOrders().get(0).getId(),
                 partService.getAllParts().get(0).getId(), 1));
+
+        // Отправка тестового лога
+        grpcLoggingClient.logAction("Action1", "EntityType1", "EntityId1", "User1", "2024-12-11T03:00:00");
     }
 }
