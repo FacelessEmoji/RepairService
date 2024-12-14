@@ -51,6 +51,14 @@ public class OrderDTO extends TimestampedDTO {
         this.estimatedCompletionTime = estimatedCompletionTime;
     }
 
+    public void setRequiredParts(String requiredParts) {
+        this.requiredParts = requiredParts;
+    }
+
+    public String getRequiredParts() {
+        return requiredParts;
+    }
+
     public String getClient() {
         return client;
     }

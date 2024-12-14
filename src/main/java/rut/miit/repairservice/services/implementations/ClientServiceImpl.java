@@ -50,13 +50,13 @@ public class ClientServiceImpl implements ClientService<String> {
         Client savedClient = clientRepository.saveAndFlush(modelMapper.map(clientDTO, Client.class));
         ClientDTO result = modelMapper.map(savedClient, ClientDTO.class);
 
-        // Отправка лога в gRPC-сервис
         grpcLoggingClient.logAction(
                 "CREATE",
                 "Client",
-                savedClient.getId(),       // Используем ID сохраненного клиента
-                "System",                  // Замените "System" на идентификатор пользователя, если есть
-                java.time.ZonedDateTime.now().toString() // Текущее время в формате ISO
+                savedClient.getId(),
+                String.format("Client created: Name=%s, Email=%s, Phone=%s",
+                        savedClient.getFirstName(), savedClient.getEmail(), savedClient.getPhoneNumber()),
+                java.time.ZonedDateTime.now().toString()
         );
 
         return result;
@@ -68,22 +68,34 @@ public class ClientServiceImpl implements ClientService<String> {
         client.setFirstName(clientDTO.getFirstName());
         client.setPhoneNumber(clientDTO.getPhoneNumber());
         client.setEmail(clientDTO.getEmail());
+
+        grpcLoggingClient.logAction(
+                "UPDATE",
+                "Client",
+                client.getId(),
+                String.format("Client updated: Name=%s, Email=%s, Phone=%s",
+                        client.getFirstName(), client.getEmail(), client.getPhoneNumber()),
+                java.time.ZonedDateTime.now().toString()
+        );
+
         return modelMapper.map(clientRepository.saveAndFlush(client), ClientDTO.class);
     }
 
     @Override
     public void deleteClient(String clientId) {
-        clientRepository.deleteById(clientId);
+        Client client = clientRepository.findById(clientId).orElseThrow();
+        clientRepository.delete(client);
 
-        // Отправка лога в gRPC-сервис
         grpcLoggingClient.logAction(
                 "DELETE",
                 "Client",
                 clientId,
-                "System",                  // Замените "System" на идентификатор пользователя, если есть
-                java.time.ZonedDateTime.now().toString() // Текущее время в формате ISO
+                String.format("Client deleted: Name=%s, Email=%s",
+                        client.getFirstName(), client.getEmail()),
+                java.time.ZonedDateTime.now().toString()
         );
     }
+
 
     @Override
     public ClientDTO updateClientName(String s, String name) {

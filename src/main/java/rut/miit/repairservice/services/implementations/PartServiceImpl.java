@@ -56,7 +56,8 @@ public class PartServiceImpl implements PartService<String> {
                 "CREATE",
                 "Part",
                 part.getId(),
-                "System",
+                String.format("Created part: Name=%s, Quantity=%d, Price=%s",
+                        part.getName(), part.getQuantity(), part.getPrice()),
                 java.time.ZonedDateTime.now().toString()
         );
 
@@ -75,7 +76,8 @@ public class PartServiceImpl implements PartService<String> {
                 "UPDATE",
                 "Part",
                 updatedPart.getId(),
-                "System",
+                String.format("Updated part: Name=%s, Quantity=%d, Price=%s",
+                        updatedPart.getName(), updatedPart.getQuantity(), updatedPart.getPrice()),
                 java.time.ZonedDateTime.now().toString()
         );
 
@@ -84,13 +86,17 @@ public class PartServiceImpl implements PartService<String> {
 
     @Override
     public void deletePart(String s) {
+        Part part = partRepository.findById(s).orElseThrow();
+        String partDetails = String.format("Deleted part: Name=%s, Quantity=%d, Price=%s",
+                part.getName(), part.getQuantity(), part.getPrice());
+
         partRepository.deleteById(s);
 
         grpcLoggingClient.logAction(
                 "DELETE",
                 "Part",
                 s,
-                "System",
+                partDetails,
                 java.time.ZonedDateTime.now().toString()
         );
     }

@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Report Generation</title>
+</head>
+<body>
+<h1>Report Generation</h1>
+<button id="generateReportButton">Generate Report</button>
+<button id="downloadReportButton" style="display: none;">Download Report</button>
+
+<script>
+    var socket = new WebSocket("ws://localhost:8080/ws/notifications");
+
+    socket.onmessage = function(event) {
+        var message = event.data;
+        alert(message);
+
+        if (message === "Отчет готов! Вы можете скачать его.") {
+            document.getElementById("downloadReportButton").style.display = "inline";
+        }
+    };
+
+    document.getElementById("generateReportButton").onclick = function() {
+        fetch("/generate-report", { method: "POST" })
+            .then(response => response.text())
+            .then(result => {
+                alert(result);
+            });
+    };
+
+    document.getElementById("downloadReportButton").onclick = function() {
+        window.location.href = "/download-report";
+    };
+</script>
+</body>
+</html>

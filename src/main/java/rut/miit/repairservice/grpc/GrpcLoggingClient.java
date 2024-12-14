@@ -9,7 +9,6 @@ import rut.miit.repairservice.LoggingServiceGrpc.LoggingServiceBlockingStub;
 import rut.miit.repairservice.LoggingServiceProto.LogRequest;
 import rut.miit.repairservice.LoggingServiceProto.LogResponse;
 
-
 @Component
 public class GrpcLoggingClient {
 
@@ -30,13 +29,13 @@ public class GrpcLoggingClient {
         this.blockingStub = LoggingServiceGrpc.newBlockingStub(channel);
     }
 
-    public void logAction(String action, String entityType, String entityId, String userId, String timestamp) {
-        // Создаем запрос
+    public void logAction(String action, String entityType, String entityId, String description, String timestamp) {
+        // Создаем запрос с использованием description вместо userId
         LogRequest request = LogRequest.newBuilder()
                 .setAction(action)
                 .setEntityType(entityType)
                 .setEntityId(entityId)
-                .setUserId(userId)
+                .setDescription(description)  // Теперь описание действия
                 .setTimestamp(timestamp)
                 .build();
 

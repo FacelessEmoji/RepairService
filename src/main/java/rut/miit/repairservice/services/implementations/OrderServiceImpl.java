@@ -72,34 +72,36 @@ public class OrderServiceImpl implements OrderService<String> {
     @Override
     public OrderDTO createOrder(OrderDTO orderDTO) {
         Order order = modelMapper.map(orderDTO, Order.class);
-        order.setClient(clientRepository.findById(orderDTO.getClient()).orElse(null));
-        order.setMaster(masterRepository.findById(orderDTO.getMaster()).orElse(null));
+        order.setClient(clientRepository.findById(orderDTO.getClient()).orElseThrow());
+        order.setMaster(masterRepository.findById(orderDTO.getMaster()).orElseThrow());
 
         Order savedOrder = orderRepository.saveAndFlush(order);
         OrderDTO savedOrderDTO = modelMapper.map(savedOrder, OrderDTO.class);
-
-        rabbitTemplate.convertAndSend(RabbitMQConfiguration.EXCHANGE_NAME, "order.price", savedOrder.getId());
-        rabbitTemplate.convertAndSend(RabbitMQConfiguration.EXCHANGE_NAME, "order.parts", savedOrder.getId());
 
         grpcLoggingClient.logAction(
                 "CREATE",
                 "Order",
                 savedOrder.getId(),
-                "System",
+                String.format(
+                        "Order created. Client ID: %s, Master ID: %s, Description: %s, Status: %s",
+                        savedOrder.getClient().getId(),
+                        savedOrder.getMaster().getId(),
+                        savedOrder.getDescription(),
+                        savedOrder.getStatus()
+                ),
                 java.time.ZonedDateTime.now().toString()
         );
 
         return savedOrderDTO;
     }
 
-
     @Override
     public OrderDTO updateOrder(String s, OrderDTO orderDTO) {
         Order order = orderRepository.findById(s).orElseThrow();
         order.setDescription(orderDTO.getDescription());
         order.setStatus(orderDTO.getStatus());
-        order.setClient(clientRepository.findById(order.getClient().getId()).orElseThrow());
-        order.setMaster(masterRepository.findById(order.getMaster().getId()).orElseThrow());
+        order.setClient(clientRepository.findById(orderDTO.getClient()).orElseThrow());
+        order.setMaster(masterRepository.findById(orderDTO.getMaster()).orElseThrow());
 
         Order updatedOrder = orderRepository.saveAndFlush(order);
 
@@ -107,7 +109,13 @@ public class OrderServiceImpl implements OrderService<String> {
                 "UPDATE",
                 "Order",
                 updatedOrder.getId(),
-                "System",
+                String.format(
+                        "Order updated. Client ID: %s, Master ID: %s, Description: %s, Status: %s",
+                        updatedOrder.getClient().getId(),
+                        updatedOrder.getMaster().getId(),
+                        updatedOrder.getDescription(),
+                        updatedOrder.getStatus()
+                ),
                 java.time.ZonedDateTime.now().toString()
         );
 
@@ -116,13 +124,22 @@ public class OrderServiceImpl implements OrderService<String> {
 
     @Override
     public void deleteOrder(String s) {
+        Order order = orderRepository.findById(s).orElseThrow();
+        String details = String.format(
+                "Deleting order. Client ID: %s, Master ID: %s, Description: %s, Status: %s",
+                order.getClient().getId(),
+                order.getMaster().getId(),
+                order.getDescription(),
+                order.getStatus()
+        );
+
         orderRepository.deleteById(s);
 
         grpcLoggingClient.logAction(
                 "DELETE",
                 "Order",
                 s,
-                "System",
+                details,
                 java.time.ZonedDateTime.now().toString()
         );
     }

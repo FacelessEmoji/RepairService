@@ -56,7 +56,8 @@ public class MasterServiceImpl implements MasterService<String> {
                 "CREATE",
                 "Master",
                 master.getId(),
-                "System",
+                String.format("Master created: Name=%s, Specialization=%s",
+                        master.getFirstName(), master.getSpecialization()),
                 java.time.ZonedDateTime.now().toString()
         );
 
@@ -69,21 +70,34 @@ public class MasterServiceImpl implements MasterService<String> {
         master.setFirstName(masterDTO.getFirstName());
         master.setPhoneNumber(masterDTO.getPhoneNumber());
         master.setSpecialization(masterDTO.getSpecialization());
+
+        grpcLoggingClient.logAction(
+                "UPDATE",
+                "Master",
+                master.getId(),
+                String.format("Master updated: Name=%s, Phone=%s, Specialization=%s",
+                        master.getFirstName(), master.getPhoneNumber(), master.getSpecialization()),
+                java.time.ZonedDateTime.now().toString()
+        );
+
         return modelMapper.map(masterRepository.saveAndFlush(master), MasterDTO.class);
     }
 
     @Override
     public void deleteMaster(String s) {
-        masterRepository.deleteById(s);
+        Master master = masterRepository.findById(s).orElseThrow();
+        masterRepository.delete(master);
 
         grpcLoggingClient.logAction(
                 "DELETE",
                 "Master",
                 s,
-                "System",
+                String.format("Master deleted: Name=%s, Specialization=%s",
+                        master.getFirstName(), master.getSpecialization()),
                 java.time.ZonedDateTime.now().toString()
         );
     }
+
     @Override
     public MasterDTO updateMasterName(String s, String name) {
         Master master = masterRepository.findById(s).orElseThrow();
